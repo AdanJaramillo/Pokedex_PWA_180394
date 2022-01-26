@@ -10,6 +10,7 @@ function App() {
   const [pokemon, setPokemon] = useState({});
   //const [currentPokemonId, setCurrentPokemonId] = useState(1);
   const [buttonAbiliti, setButtonAbiliti] = useState(false);
+  const [buscar, setBuscar] = useState("");
 
   //const add = () => {
    // return pokemon.id + 1;
@@ -53,6 +54,19 @@ function App() {
   }
 }
 
+const handleBuscar = ({ target }) => {
+  setBuscar(target.value);
+};
+const handleSubmit = (e) => {
+  e.preventDefault();
+  fetch(`https://pokeapi.co/api/v2/pokemon/${buscar}/`)
+    .then((response) => response.json())
+    .then((data) => {
+      setPokemon(data);
+      setBuscar("");
+    })
+    .catch((error) => console.log("error", error));
+};
 
   useEffect(()=>{
     console.log({pokemon});
@@ -65,7 +79,23 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="flex-cotainer">
-        <a className="alignCentral" href="https://github.com/AdanJaramillo/pokedex_180394">Github</a>
+          
+        <a className="alignCentral" href="https://github.com/AdanJaramillo/Pokedex_PWA_180394">Github</a>
+        
+          <div className="d-flex">
+            <form onSubmit={handleSubmit}>
+              <input
+                className="form-input"
+                onChange={handleBuscar}
+                name="Buscar"
+                value={buscar}
+              />
+              <button className="button" type="submit">
+                Buscar
+              </button>
+            </form>
+          </div>
+        
         <img
         src= {pokemon?.sprites?.back_default ?? logo }
         className="poke-image" 
